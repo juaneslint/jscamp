@@ -1,119 +1,150 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+      <header>
+        <h1>
+          <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          DevJobs
+        </h1>
+
+        <nav>
+          <a href="">Empleos</a>
+        </nav>
+
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+          <a href="">Publicar un empleo</a>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
+      <main>
+        <section className="jobs-search">
+          <h1>Encuentra tu próximo trabajo</h1>
+          <p>Explora miles de oportunidades en el sector tecnológico.</p>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <form role="search">
+            <div className="search-bar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
+                className="icon icon-tabler icons-tabler-outline icon-tabler-search">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                <path d="M21 21l-6 -6" />
+              </svg>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+              <input required type="text" placeholder="Buscar trabajos, empresas o habilidades" />
+            </div>
+
+            <div className="search-filters">
+              <select name="technology" id="filter-technology">
+                <option value="">Tecnología</option>
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="react">React</option>
+                <option value="nodejs">Node.js</option>
+              </select>
+
+              <select name="location" id="location">
+                <option value="">Ubicación</option>
+                <option value="remoto">Remoto</option>
+                <option value="cdmx">Ciudad de México</option>
+                <option value="guadalajara">Guadalajara</option>
+                <option value="monterrey">Monterrey</option>
+                <option value="barcelona">Barcelona</option>
+              </select>
+
+              <select name="experience-level" id="experience-level">
+                <option value="">Nivel de experiencia</option>
+                <option value="junior">Junior</option>
+                <option value="mid">Mid-level</option>
+                <option value="senior">Senior</option>
+                <option value="lead">Lead</option>
+              </select>
+            </div>
+          </form>
+        </section>
+
+        <section>
+          <h2>Resultados de búsqueda</h2>
+
+          <div className="jobs-listings">
+            <article className="job-listing-card">
+              <div>
+                <a href="./detalle-empleo.html">
+                  <h3>Ingeniero de Software</h3>
+                </a>
+                <small>Tech Solutions Inc. | Remoto</small>
+                <p>Buscamos un ingeniero de software con experiencia en desarrollo web y conocimientos en JavaScript, React
+                  y
+                  Node.js. El candidato ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de
+                  comunicación.</p>
+              </div>
+              <button className="button-apply-job" id="boton-importante">Aplicar</button>
+            </article>
+
+            <article className="job-listing-card">
+              <div>
+                <h3>Analista de Datos</h3>
+                <small>Data Driven Co. | Ciudad de México</small>
+                <p>Estamos buscando un analista de datos con experiencia en el manejo de grandes conjuntos de datos y
+                  herramientas de visualización. Se requiere conocimiento en SQL, Python y R.</p>
+              </div>
+              <button className="button-apply-job">Aplicar</button>
+            </article>
+
+            <article className="job-listing-card">
+              <div>
+                <h3>Desarrollador de Aplicaciones Móviles</h3>
+                <small>Mobile Apps Ltd. | Guadalajara</small>
+                <p>Buscamos un desarrollador de aplicaciones móviles con experiencia en iOS y/o Android. El candidato debe
+                  tener conocimientos en Swift, Kotlin y el desarrollo de interfaces de usuario.</p>
+              </div>
+              <button className="button-apply-job">Aplicar</button>
+            </article>
+
+            <article className="job-listing-card">
+              <div>
+                <h3>Ingeniero de DevOps</h3>
+                <small>Cloud Services SA | Remoto</small>
+                <p>Estamos buscando un ingeniero de DevOps con experiencia en la gestión de infraestructuras en la nube,
+                  automatización de procesos y herramientas de integración continua. Se requiere conocimiento en AWS, Azure
+                  o
+                  GCP.</p>
+              </div>
+              <button className="button-apply-job">Aplicar</button>
+            </article>
+          </div>
+
+          <nav className="pagination">
+            <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+              strokeLinecap="round" strokeLinejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M15 6l-6 6l6 6" />
+            </svg></a>
+            <a className="is-active" href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+              strokeLinecap="round" strokeLinejoin="round"
+              className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M9 6l6 6l-6 6" />
+            </svg></a>
+          </nav>
+        </section>
+      </main>
+
+      <footer>
+        <small>&copy; 2025 DevJobs. Todos los derechos reservados.</small>
+      </footer>
     </>
   )
 }
