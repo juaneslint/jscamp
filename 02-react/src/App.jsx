@@ -1,27 +1,12 @@
+import JobCard from './components/JobCard';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
 
   return (
     <>
-      <header>
-        <h1>
-          <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          DevJobs
-        </h1>
-
-        <nav>
-          <a href="">Empleos</a>
-        </nav>
-
-        <div>
-          <a href="">Publicar un empleo</a>
-        </div>
-      </header>
-
+      <Header />
       <main>
         <section className="jobs-search">
           <h1>Encuentra tu próximo trabajo</h1>
@@ -74,51 +59,52 @@ function App() {
           <h2>Resultados de búsqueda</h2>
 
           <div className="jobs-listings">
-            <article className="job-listing-card">
-              <div>
-                <a href="./detalle-empleo.html">
-                  <h3>Ingeniero de Software</h3>
-                </a>
-                <small>Tech Solutions Inc. | Remoto</small>
-                <p>Buscamos un ingeniero de software con experiencia en desarrollo web y conocimientos en JavaScript, React
-                  y
-                  Node.js. El candidato ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de
-                  comunicación.</p>
-              </div>
-              <button className="button-apply-job" id="boton-importante">Aplicar</button>
-            </article>
+            <JobCard
+              job={{
+                id: 1,
+                title: "Ingeniero de Software",
+                company: "Tech Solutions Inc.",
+                location: "Remoto",
+                salary: "$100,000 - $120,000",
+                description: "Buscamos un ingeniero de software con experiencia en desarrollo web y conocimientos en JavaScript, React y Node.js. El candidato ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de comunicación.",
+                tags: ["JavaScript", "React", "Node.js"],
+              }}
+            />
+            <JobCard
+              job={{
+                id: 2,
+                title: "Ingeniero QA Automation",
+                company: "Global Logic",
+                location: "Remoto",
+                salary: "$1500 - $2000",
+                description: "Buscamos un ingeniero QA Automation con experiencia en desarrollo web y conocimientos en JavaScript, Playwright y Cypress. El candidato ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de comunicación.",
+                tags: ["JavaScript", "Playwright", "Cypress"],
+              }}
+            />
+            <JobCard
+              job={{
+                id: 3,
+                title: "Ingeniero Backend",
+                company: "Enterprise Solutions",
+                location: "Presencial",
+                salary: "$2500 - $3000",
+                description: "Buscamos un ingeniero backend con experiencia en desarrollo web y conocimientos en Python, Django y Flask. El candidato ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de comunicación.",
+                tags: ["Python", "Django", "Flask"],
+              }}
+            />
+            <JobCard
+              job={{
+                id: 4,
+                title: "Ingeniero Frontend",
+                company: "Enterprise Solutions",
+                location: "Presencial",
+                salary: "$2500 - $3000",
+                description: "Buscamos un ingeniero frontend con experiencia en desarrollo web y conocimientos en JavaScript, React y Node.js. El candidato ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de comunicación.",
+                tags: ["JavaScript", "React", "Node.js"],
+              }}
+            />
 
-            <article className="job-listing-card">
-              <div>
-                <h3>Analista de Datos</h3>
-                <small>Data Driven Co. | Ciudad de México</small>
-                <p>Estamos buscando un analista de datos con experiencia en el manejo de grandes conjuntos de datos y
-                  herramientas de visualización. Se requiere conocimiento en SQL, Python y R.</p>
-              </div>
-              <button className="button-apply-job">Aplicar</button>
-            </article>
 
-            <article className="job-listing-card">
-              <div>
-                <h3>Desarrollador de Aplicaciones Móviles</h3>
-                <small>Mobile Apps Ltd. | Guadalajara</small>
-                <p>Buscamos un desarrollador de aplicaciones móviles con experiencia en iOS y/o Android. El candidato debe
-                  tener conocimientos en Swift, Kotlin y el desarrollo de interfaces de usuario.</p>
-              </div>
-              <button className="button-apply-job">Aplicar</button>
-            </article>
-
-            <article className="job-listing-card">
-              <div>
-                <h3>Ingeniero de DevOps</h3>
-                <small>Cloud Services SA | Remoto</small>
-                <p>Estamos buscando un ingeniero de DevOps con experiencia en la gestión de infraestructuras en la nube,
-                  automatización de procesos y herramientas de integración continua. Se requiere conocimiento en AWS, Azure
-                  o
-                  GCP.</p>
-              </div>
-              <button className="button-apply-job">Aplicar</button>
-            </article>
           </div>
 
           <nav className="pagination">
@@ -142,9 +128,7 @@ function App() {
         </section>
       </main>
 
-      <footer>
-        <small>&copy; 2025 DevJobs. Todos los derechos reservados.</small>
-      </footer>
+      <Footer />
     </>
   )
 }
