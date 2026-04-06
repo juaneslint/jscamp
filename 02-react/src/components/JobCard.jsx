@@ -1,6 +1,15 @@
-function JobCard({ job }) {
+import { useState } from "react";
 
+function JobCard({ job }) {
+    const [isApplied, setIsApplied] = useState(false);
     const { titulo, empresa, ubicacion, salary, descripcion, data } = job;
+    const handleApplyClick = () => {
+        setIsApplied(true);
+    }
+
+    const buttonClasses = isApplied ? 'button-apply-job is-applied' : 'button-apply-job';
+    const buttonText = isApplied ? 'Aplicado' : 'Aplicar';
+
     return (
         <article className="job-card">
             <header className="job-card-header">
@@ -16,7 +25,7 @@ function JobCard({ job }) {
 
             <footer className="job-card-footer">
                 <span className="job-tags">{Array.isArray(data.technology) ? data.technology.join(', ') : data.technology}</span>
-                <button className="btn-apply">Aplicar</button>
+                <button className={buttonClasses} onClick={handleApplyClick}>{buttonText}</button>
             </footer>
         </article>
     )
