@@ -20,14 +20,22 @@ function App() {
 
   const jobsFilteredByFilters = jobsData.filter(job => {
     return (
-      (filters.technology === '' || job.data.technology === filters.technology)
+      (filters.technology === '' || job.data.technology.toLowerCase() === filters.technology.toLowerCase()) &&
+      (filters.location === '' || job.ubicacion.toLowerCase() === filters.location.toLowerCase()) &&
+      (filters.experienceLevel === '' || job.data.nivel.toLowerCase() === filters.experienceLevel.toLowerCase())
     )
   })
 
   const jobsWithTextFilter = textToFilter === ''
     ? jobsFilteredByFilters
     : jobsFilteredByFilters.filter(job => {
-      return job.titulo.toLowerCase().includes(textToFilter.toLowerCase())
+      return job.titulo.toLowerCase().includes(textToFilter.toLowerCase()) ||
+        job.empresa.toLowerCase().includes(textToFilter.toLowerCase()) ||
+        job.ubicacion.toLowerCase().includes(textToFilter.toLowerCase()) ||
+        job.descripcion.toLowerCase().includes(textToFilter.toLowerCase()) ||
+        job.data.technology.toLowerCase().includes(textToFilter.toLowerCase()) ||
+        job.data.modalidad.toLowerCase().includes(textToFilter.toLowerCase()) ||
+        job.data.nivel.toLowerCase().includes(textToFilter.toLowerCase())
     })
 
   const totalPages = Math.ceil(jobsWithTextFilter.length / RESULTS_PER_PAGE)
