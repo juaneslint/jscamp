@@ -1,6 +1,6 @@
 import { useId } from "react";
 
-function SearchFormSection() {
+function SearchFormSection({ onTextFilter, onSearch }) {
     const idText = useId()
     const idTechnology = useId()
     const idLocation = useId()
@@ -8,6 +8,21 @@ function SearchFormSection() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        const formData = new FormData(event.target)
+        const filters = {
+            search: formData.get(idText),
+            technology: formData.get(idTechnology),
+            location: formData.get(idLocation),
+            experienceLevel: formData.get(idExperienceLevel)
+        }
+
+        onSearch(filters)
+    }
+
+    const handleTextChange = (event) => {
+        const text = event.target.value
+        onTextFilter(text)
     }
     return (
         <section className="jobs-search">
@@ -24,7 +39,8 @@ function SearchFormSection() {
                         <path d="M21 21l-6 -6" />
                     </svg>
 
-                    <input name={idText} required type="text" placeholder="Buscar trabajos, empresas o habilidades" />
+                    <input name={idText} type="text" placeholder="Buscar trabajos, empresas o habilidades"
+                        onChange={handleTextChange} />
                     <button type="submit" style={{ position: 'absolute', right: '4px' }}>Buscar</button>
                 </div>
 
@@ -36,6 +52,8 @@ function SearchFormSection() {
                         <option value="java">Java</option>
                         <option value="react">React</option>
                         <option value="nodejs">Node.js</option>
+                        <option value="mobile">Mobile</option>
+
                     </select>
 
                     <select name={idLocation} id="location">
