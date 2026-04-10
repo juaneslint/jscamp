@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 
 function SearchFormSection({ onTextFilter, onSearch }) {
     const idText = useId()
@@ -6,10 +6,13 @@ function SearchFormSection({ onTextFilter, onSearch }) {
     const idLocation = useId()
     const idExperienceLevel = useId()
 
+    const [focusedField, setFocusedField] = useState(null)
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const formData = new FormData(event.target)
+        const formData = new FormData(event.currentTarget)
+
         const filters = {
             search: formData.get(idText),
             technology: formData.get(idTechnology),
@@ -29,7 +32,7 @@ function SearchFormSection({ onTextFilter, onSearch }) {
             <h1>Encuentra tu próximo trabajo</h1>
             <p>Explora miles de oportunidades en el sector tecnológico.</p>
 
-            <form onSubmit={handleSubmit} role="search">
+            <form className='search-form' onChange={handleSubmit} role="search">
                 <div className="search-bar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
@@ -39,13 +42,31 @@ function SearchFormSection({ onTextFilter, onSearch }) {
                         <path d="M21 21l-6 -6" />
                     </svg>
 
-                    <input name={idText} type="text" placeholder="Buscar trabajos, empresas o habilidades"
-                        onChange={handleTextChange} />
-                    <button type="submit" style={{ position: 'absolute', right: '4px' }}>Buscar</button>
+                    <input
+                        id={idText}
+                        name={idText}
+                        type="text"
+                        placeholder="Buscar trabajos, empresas o habilidades"
+                        onChange={handleTextChange}
+                        onFocus={() => setFocusedField('search')}
+                        onBlur={() => setFocusedField(null)}
+                        className={focusedField === 'search' ? 'input-focused' : ''}
+                    />
+                    {focusedField === 'search' && (
+                        <small className='input-hint'>Busca por título, empresa o tecnología</small>
+                    )}
                 </div>
 
                 <div className="search-filters">
-                    <select name={idTechnology} id="filter-technology">
+                    <select
+                        name={idTechnology}
+                        id={idTechnology}
+                        onFocus={() => setFocusedField('technology')}
+                        onBlur={() => setFocusedField(null)}
+                        style={{
+                            borderColor: focusedField === 'technology' ? '#4f46e5' : '#d1d5db',
+                        }}
+                    >
                         <option value="">Tecnología</option>
                         <option value="javascript">JavaScript</option>
                         <option value="python">Python</option>
@@ -56,7 +77,15 @@ function SearchFormSection({ onTextFilter, onSearch }) {
 
                     </select>
 
-                    <select name={idLocation} id="location">
+                    <select
+                        name={idLocation}
+                        id={idLocation}
+                        onFocus={() => setFocusedField('location')}
+                        onBlur={() => setFocusedField(null)}
+                        style={{
+                            borderColor: focusedField === 'location' ? '#4f46e5' : '#d1d5db',
+                        }}
+                    >
                         <option value="">Ubicación</option>
                         <option value="remoto">Remoto</option>
                         <option value="ciudad de méxico">Ciudad de México</option>
@@ -65,7 +94,15 @@ function SearchFormSection({ onTextFilter, onSearch }) {
                         <option value="barcelona">Barcelona</option>
                     </select>
 
-                    <select name={idExperienceLevel} id="experience-level">
+                    <select
+                        name={idExperienceLevel}
+                        id={idExperienceLevel}
+                        onFocus={() => setFocusedField('experienceLevel')}
+                        onBlur={() => setFocusedField(null)}
+                        style={{
+                            borderColor: focusedField === 'experienceLevel' ? '#4f46e5' : '#d1d5db',
+                        }}
+                    >
                         <option value="">Nivel de experiencia</option>
                         <option value="junior">Junior</option>
                         <option value="mid-level">Mid-level</option>
