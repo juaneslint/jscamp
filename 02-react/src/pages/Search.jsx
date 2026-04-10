@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Pagination from '../components/Pagination';
 import SearchFormSection from '../components/SearchFormSection';
@@ -55,6 +55,10 @@ export function SearchPage() {
         setTextToFilter(newTextToFilter)
         setCurrentPage(1)
     }
+
+    useEffect(() => {
+        document.title = `Resultados: ${jobsWithTextFilter.length}, Página ${currentPage} - DevJobs`
+    }, [jobsWithTextFilter, currentPage]) // si [] -> solo se ejecuta una vez al montar
 
     return (
         <main>
