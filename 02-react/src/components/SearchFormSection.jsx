@@ -1,12 +1,6 @@
 import { useId, useState } from "react";
-
-function SearchFormSection({ onTextFilter, onSearch }) {
-    const idText = useId()
-    const idTechnology = useId()
-    const idLocation = useId()
-    const idExperienceLevel = useId()
-
-    const [focusedField, setFocusedField] = useState(null)
+const useSearchForm = ({ idTechnology, idLocation, idExperienceLevel, idText, onSearch, onTextFilter }) => {
+    const [searchText, setSearchText] = useState('')
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -14,7 +8,6 @@ function SearchFormSection({ onTextFilter, onSearch }) {
         const formData = new FormData(event.currentTarget)
 
         const filters = {
-            search: formData.get(idText),
             technology: formData.get(idTechnology),
             location: formData.get(idLocation),
             experienceLevel: formData.get(idExperienceLevel)
@@ -25,8 +18,34 @@ function SearchFormSection({ onTextFilter, onSearch }) {
 
     const handleTextChange = (event) => {
         const text = event.target.value
+        setSearchText(text)
         onTextFilter(text)
     }
+
+    return {
+        searchText,
+        handleSubmit,
+        handleTextChange,
+    }
+
+}
+export function SearchFormSection({ onTextFilter, onSearch }) {
+    const idText = useId()
+    const idTechnology = useId()
+    const idLocation = useId()
+    const idExperienceLevel = useId()
+
+    const { handleSubmit, handleTextChange } = useSearchForm({
+        idTechnology,
+        idLocation,
+        idExperienceLevel,
+        idText,
+        onSearch,
+        onTextFilter
+    })
+    const [focusedField, setFocusedField] = useState(null)
+
+
     return (
         <section className="jobs-search">
             <h1>Encuentra tu próximo trabajo</h1>
@@ -116,3 +135,4 @@ function SearchFormSection({ onTextFilter, onSearch }) {
 }
 
 export default SearchFormSection
+
