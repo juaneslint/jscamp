@@ -4,17 +4,16 @@ import Footer from './components/Footer'
 import { HomePage } from './pages/Home';
 import { SearchPage } from './pages/Search';
 import { NotFoundPage } from './pages/404';
+import { Route } from './components/Route';
 
 
 function App() {
-  const { pathname } = window.location
-
   return (
     <>
       <Header />
-      {pathname === '/' && <HomePage />}
-      {pathname === '/search' && <SearchPage />}
-      {pathname !== '/' && pathname !== '/search' && <NotFoundPage />}
+      <Route path="/" component={HomePage} />
+      <Route path="/search" component={SearchPage} />
+      <Route path="*" component={NotFoundPage} />
       <Footer />
     </>
   )
