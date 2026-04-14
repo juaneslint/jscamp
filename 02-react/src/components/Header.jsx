@@ -15,7 +15,8 @@ function Header() {
             </Link>
 
             <nav>
-                <Link href="/search">Empleos</Link>
+                <Link href="/search" exact>Empleos</Link>
+                <Link href="/contact" exact={false}>Contacto</Link>
             </nav>
 
         </header>
