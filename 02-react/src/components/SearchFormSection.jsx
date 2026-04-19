@@ -29,7 +29,7 @@ const useSearchForm = ({ idTechnology, idLocation, idExperienceLevel, idText, on
     }
 
 }
-export function SearchFormSection({ onTextFilter, onSearch }) {
+export function SearchFormSection({ onTextFilter, onSearch, handleClearFilters, showClearButton, filters, textToFilter }) {
     const idText = useId()
     const idTechnology = useId()
     const idLocation = useId()
@@ -66,6 +66,7 @@ export function SearchFormSection({ onTextFilter, onSearch }) {
                         name={idText}
                         type="text"
                         placeholder="Buscar trabajos, empresas o habilidades"
+                        value={textToFilter}
                         onChange={handleTextChange}
                         onFocus={() => setFocusedField('search')}
                         onBlur={() => setFocusedField(null)}
@@ -80,6 +81,8 @@ export function SearchFormSection({ onTextFilter, onSearch }) {
                     <select
                         name={idTechnology}
                         id={idTechnology}
+                        value={filters.technology}
+                        onChange={handleSubmit}
                         onFocus={() => setFocusedField('technology')}
                         onBlur={() => setFocusedField(null)}
                         style={{
@@ -99,6 +102,8 @@ export function SearchFormSection({ onTextFilter, onSearch }) {
                     <select
                         name={idLocation}
                         id={idLocation}
+                        value={filters.location}
+                        onChange={handleSubmit}
                         onFocus={() => setFocusedField('location')}
                         onBlur={() => setFocusedField(null)}
                         style={{
@@ -116,6 +121,8 @@ export function SearchFormSection({ onTextFilter, onSearch }) {
                     <select
                         name={idExperienceLevel}
                         id={idExperienceLevel}
+                        value={filters.experienceLevel}
+                        onChange={handleSubmit}
                         onFocus={() => setFocusedField('experienceLevel')}
                         onBlur={() => setFocusedField(null)}
                         style={{
@@ -128,6 +135,7 @@ export function SearchFormSection({ onTextFilter, onSearch }) {
                         <option value="senior">Senior</option>
                         <option value="lead">Lead</option>
                     </select>
+                    {showClearButton && <button onClick={handleClearFilters}>Limpiar filtros</button>}
                 </div>
             </form>
         </section>

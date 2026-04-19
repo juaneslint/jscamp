@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import SearchFormSection from '../components/SearchFormSection';
 import JobListings from '../components/JobListings';
+import Spinner from '../components/Spinner';
 
 const RESULTS_PER_PAGE = 5
 
@@ -18,6 +19,21 @@ const useFilters = () => {
     const [jobs, setJobs] = useState([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(true)    
+
+    const isFiltering = () => {
+        return !!(filters.technology || filters.location || filters.experienceLevel || textToFilter)
+    }
+
+    const handleClearFilters = () => {
+        setFilters({ // limpia los filtros 
+            technology: '',
+            location: '',
+            experienceLevel: '',
+        })
+        setTextToFilter('') // limpia el filtro de texto
+        setCurrentPage(1) // vuelve a la primera página
+
+    }
 
     useEffect(() => {
         async function fetchJobs() {
@@ -75,9 +91,13 @@ const useFilters = () => {
         total,
         totalPages,
         currentPage,
+        isFiltering,
         handlePageChange,
         handleSearch,
-        handleTextFilter
+        handleTextFilter,
+        handleClearFilters,
+        filters,
+        textToFilter
     }
 }
 
@@ -91,7 +111,11 @@ export function SearchPage() {
         currentPage,
         handlePageChange,
         handleSearch,
-        handleTextFilter
+        handleTextFilter,
+        isFiltering,
+        handleClearFilters,
+        filters,
+        textToFilter
     }
     = useFilters()
     
@@ -102,10 +126,22 @@ export function SearchPage() {
 
     return (
         <main>
-            <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter} />
+            <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter} showClearButton={isFiltering()} handleClearFilters={handleClearFilters} filters={filters} textToFilter={textToFilter} />
             <section>
                 {
-                    loading ? <p>Cargando...</p> : <JobListings jobs={jobs} />
+                    loading ?(
+                        <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: '400px',
+                                gap: '20px'
+                        }}><Spinner /><p>Cargando empleos...</p></div>
+                    ) : (
+                        <JobListings jobs={jobs} />
+
+                    )
                 }
                 <JobListings jobs={jobs} />
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
