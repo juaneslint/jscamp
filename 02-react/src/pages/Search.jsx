@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { usePersistedFilters } from '../hooks/usePersistedFilters';
 
 import Pagination from '../components/Pagination';
 import SearchFormSection from '../components/SearchFormSection';
@@ -7,13 +8,7 @@ import Spinner from '../components/Spinner';
 
 const RESULTS_PER_PAGE = 5
 
-const useFilters = () => {
-    const [filters, setFilters] = useState({
-        technology: '',
-        location: '',
-        experienceLevel: '',
-    })
-    const [textToFilter, setTextToFilter] = useState('')
+const useFilters = (filters, setFilters, textToFilter, setTextToFilter) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const [jobs, setJobs] = useState([])
@@ -24,7 +19,7 @@ const useFilters = () => {
         return !!(filters.technology || filters.location || filters.experienceLevel || textToFilter)
     }
 
-    const handleClearFilters = () => {
+    const handleClearFilters = (clearPersistedData) => {
         setFilters({ // limpia los filtros 
             technology: '',
             location: '',
@@ -32,7 +27,7 @@ const useFilters = () => {
         })
         setTextToFilter('') // limpia el filtro de texto
         setCurrentPage(1) // vuelve a la primera página
-
+        clearPersistedData() // limpia los filtros persistidos en localStorage
     }
 
     useEffect(() => {
@@ -95,13 +90,12 @@ const useFilters = () => {
         handlePageChange,
         handleSearch,
         handleTextFilter,
-        handleClearFilters,
-        filters,
-        textToFilter
+        handleClearFilters
     }
 }
 
 export function SearchPage() {
+    const { filters, setFilters, textToFilter, setTextToFilter, clearPersistedData } = usePersistedFilters() // hook personalizado para persistir filtros en localStorage
 
     const {
         jobs,
@@ -113,12 +107,14 @@ export function SearchPage() {
         handleSearch,
         handleTextFilter,
         isFiltering,
-        handleClearFilters,
-        filters,
-        textToFilter
+        handleClearFilters
     }
-    = useFilters()
+    = useFilters(filters, setFilters, textToFilter, setTextToFilter)
     
+
+    const handleClearFiltersWithPersistence = () => {
+        handleClearFilters(clearPersistedData)
+    }
 
     useEffect(() => {
         document.title = `Resultados: ${total}, Página ${currentPage} - DevJobs`
@@ -126,7 +122,7 @@ export function SearchPage() {
 
     return (
         <main>
-            <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter} showClearButton={isFiltering()} handleClearFilters={handleClearFilters} filters={filters} textToFilter={textToFilter} />
+            <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter} showClearButton={isFiltering()} handleClearFilters={handleClearFiltersWithPersistence} filters={filters} textToFilter={textToFilter} />
             <section>
                 {
                     loading ?(
@@ -143,7 +139,6 @@ export function SearchPage() {
 
                     )
                 }
-                <JobListings jobs={jobs} />
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </section>
         </main>
