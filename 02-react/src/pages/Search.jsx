@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePersistedFilters } from '../hooks/usePersistedFilters';
+import { useRouter } from '../hooks/useRouter';
 
 import Pagination from '../components/Pagination';
 import SearchFormSection from '../components/SearchFormSection';
@@ -9,11 +10,17 @@ import Spinner from '../components/Spinner';
 const RESULTS_PER_PAGE = 5
 
 const useFilters = (filters, setFilters, textToFilter, setTextToFilter) => {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(() => {
+        const params = new URLSearchParams(window.location.search)
+        const page = params.get('page')
+        return Number.isNaN(page) ? (page) : 1
+    });
 
     const [jobs, setJobs] = useState([])
     const [total, setTotal] = useState(0)
-    const [loading, setLoading] = useState(true)    
+    const [loading, setLoading] = useState(true)
+
+    const { navigateTo } = useRouter()
 
     const isFiltering = () => {
         return !!(filters.technology || filters.location || filters.experienceLevel || textToFilter)
@@ -36,11 +43,11 @@ const useFilters = (filters, setFilters, textToFilter, setTextToFilter) => {
                 setLoading(true)
 
                 const params = new URLSearchParams()
-                if(textToFilter) params.append('text', textToFilter)
-                if(filters.technology) params.append('technology', filters.technology)
-                if(filters.location) params.append('type', filters.location)
-                if(filters.experienceLevel) params.append('level', filters.experienceLevel)
-                
+                if (textToFilter) params.append('text', textToFilter)
+                if (filters.technology) params.append('technology', filters.technology)
+                if (filters.location) params.append('type', filters.location)
+                if (filters.experienceLevel) params.append('level', filters.experienceLevel)
+
                 const offset = (currentPage - 1) * RESULTS_PER_PAGE
                 params.append('limit', RESULTS_PER_PAGE)
                 params.append('offset', offset)
@@ -48,21 +55,37 @@ const useFilters = (filters, setFilters, textToFilter, setTextToFilter) => {
                 const queryParams = params.toString()
 
                 const response = await fetch(`https://jscamp-api.vercel.app/api/jobs?${queryParams}`)
-                const json = await response .json()
+                const json = await response.json()
 
                 setJobs(json.data)
                 setTotal(json.total)
-            } catch (error){
+            } catch (error) {
                 console.error('Error fetching jobs:', error)
             }
-            finally{
+            finally {
                 setLoading(false)
             }
         }
         fetchJobs()
     }, [filters, textToFilter, currentPage])
 
-   
+    useEffect(() => {
+        const params = new URLSearchParams()
+
+        if (textToFilter) params.append('text', textToFilter)
+        if (filters.technology) params.append('technology', filters.technology)
+        if (filters.location) params.append('type', filters.location)
+        if (filters.experienceLevel) params.append('level', filters.experienceLevel)
+
+        if (currentPage > 1) params.append('page', currentPage) // si la página es mayor a 1, la agrego a los parámetros
+
+        const newUrl = params.toString()
+            ? `${window.location.pathname}?${params.toString()}`
+            : window.location.pathname
+
+        navigateTo(newUrl)
+
+    }, [filters, currentPage, textToFilter, navigateTo])
 
     const totalPages = Math.ceil(total / RESULTS_PER_PAGE)
 
@@ -109,30 +132,33 @@ export function SearchPage() {
         isFiltering,
         handleClearFilters
     }
-    = useFilters(filters, setFilters, textToFilter, setTextToFilter)
-    
+        = useFilters(filters, setFilters, textToFilter, setTextToFilter)
+
 
     const handleClearFiltersWithPersistence = () => {
         handleClearFilters(clearPersistedData)
     }
 
-    useEffect(() => {
-        document.title = `Resultados: ${total}, Página ${currentPage} - DevJobs`
-    }, [total, currentPage]) // si [] -> solo se ejecuta una vez al montar
+    const title = loading
+        ? 'Cargando... - DevJobs'
+        : `Resultados: ${total}, Página ${currentPage} - DevJobs`;
 
     return (
         <main>
+            <title>{title}</title>
+            <meta name='description' content='Explora miles de oportunidades laborales en el sector tecnológico. Encuentra tu próxima empleo en DevJobs.' />
             <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter} showClearButton={isFiltering()} handleClearFilters={handleClearFiltersWithPersistence} filters={filters} textToFilter={textToFilter} />
             <section>
+                <h2 style={{ textAlign: 'center' }}>Resultados de búsqueda</h2>
                 {
-                    loading ?(
+                    loading ? (
                         <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                height: '400px',
-                                gap: '20px'
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: '400px',
+                            gap: '20px'
                         }}><Spinner /><p>Cargando empleos...</p></div>
                     ) : (
                         <JobListings jobs={jobs} />

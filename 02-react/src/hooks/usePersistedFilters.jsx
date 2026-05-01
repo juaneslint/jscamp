@@ -3,6 +3,15 @@ import { useState, useEffect } from 'react';
 export function usePersistedFilters() {
     const [filters, setFilters] = useState(() => {
         try{
+            const params = new URLSearchParams(window.location.search)
+            if (params.has('technology') || params.has('type') || params.has('level')) {
+                return {
+                    technology: params.get('technology') || '',
+                    location: params.get('type') || '',  
+                    experienceLevel: params.get('level') || '',  
+                }
+            }
+
             const saved = localStorage.getItem('jobFilters')
             return saved ? JSON.parse(saved) : {
                 technology: '',
@@ -20,6 +29,11 @@ export function usePersistedFilters() {
 
     const [textToFilter, setTextToFilter] = useState(() => {
         try {
+            const params = new URLSearchParams(window.location.search)
+            if (params.has('text')) {
+                return params.get('text')
+            }
+
             return localStorage.getItem('jobTextFilter') || ''
         } catch {
             return ''

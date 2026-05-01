@@ -1,11 +1,21 @@
-import { useId, useState } from "react";
-const useSearchForm = ({ idTechnology, idLocation, idExperienceLevel, idText, onSearch, onTextFilter }) => {
-    const [searchText, setSearchText] = useState('')
+import { useId, useState, useEffect, useRef } from "react";
+
+const useSearchForm = ({ idTechnology, idLocation, idExperienceLevel, idText, onSearch, onTextFilter, textToFilter }) => {
+    const [searchText, setSearchText] = useState(textToFilter || '')
+    const timeoutRef = useRef(null)
+
+    useEffect(() => {
+        setSearchText(textToFilter || '')
+    }, [textToFilter])
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget)
+
+        if (event.target.name === idText) {
+            return;
+        }
 
         const filters = {
             technology: formData.get(idTechnology),
@@ -18,8 +28,16 @@ const useSearchForm = ({ idTechnology, idLocation, idExperienceLevel, idText, on
 
     const handleTextChange = (event) => {
         const text = event.target.value
-        setSearchText(text)
-        onTextFilter(text)
+        setSearchText(text) // actualizamos el input inmeditamente
+
+        // DEBOUNCE: cancelamos el timeout anterior
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+        }
+
+        timeoutRef.current = setTimeout(() => {
+            onTextFilter(text)
+        }, 500)
     }
 
     return {
@@ -35,13 +53,14 @@ export function SearchFormSection({ onTextFilter, onSearch, handleClearFilters, 
     const idLocation = useId()
     const idExperienceLevel = useId()
 
-    const { handleSubmit, handleTextChange } = useSearchForm({
+    const { handleSubmit, handleTextChange, searchText } = useSearchForm({
         idTechnology,
         idLocation,
         idExperienceLevel,
         idText,
         onSearch,
-        onTextFilter
+        onTextFilter,
+        textToFilter
     })
     const [focusedField, setFocusedField] = useState(null)
 
@@ -66,15 +85,12 @@ export function SearchFormSection({ onTextFilter, onSearch, handleClearFilters, 
                         name={idText}
                         type="text"
                         placeholder="Buscar trabajos, empresas o habilidades"
-                        value={textToFilter}
+                        value={searchText}
                         onChange={handleTextChange}
                         onFocus={() => setFocusedField('search')}
                         onBlur={() => setFocusedField(null)}
                         className={focusedField === 'search' ? 'input-focused' : ''}
                     />
-                    {focusedField === 'search' && (
-                        <small className='input-hint'>Busca por título, empresa o tecnología</small>
-                    )}
                 </div>
 
                 <div className="search-filters">
